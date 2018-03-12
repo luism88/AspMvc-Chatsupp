@@ -1,0 +1,10 @@
+C:\Users\Luis\source\repos\aspmvc-chat-room\aspmvc-chat-room\aspmvc-chat-room.Repository\bin\Debug\aspmvc-chat-room.Repository.dll
+C:\Users\Luis\source\repos\aspmvc-chat-room\aspmvc-chat-room\aspmvc-chat-room.Repository\bin\Debug\aspmvc-chat-room.Repository.pdb
+C:\Users\Luis\source\repos\aspmvc-chat-room\aspmvc-chat-room\aspmvc-chat-room.Repository\obj\Debug\aspmvc-chat-room.Repository.csproj.CoreCompileInputs.cache
+C:\Users\Luis\source\repos\aspmvc-chat-room\aspmvc-chat-room\aspmvc-chat-room.Repository\obj\Debug\aspmvc-chat-room.Repository.dll
+C:\Users\Luis\source\repos\aspmvc-chat-room\aspmvc-chat-room\aspmvc-chat-room.Repository\obj\Debug\aspmvc-chat-room.Repository.pdb
+C:\Users\Luis\source\repos\aspmvc-chat-room\aspmvc-chat-room\aspmvc-chat-room.Repository\bin\Debug\aspmvc-chat-room.Repository.dll.config
+C:\Users\Luis\source\repos\aspmvc-chat-room\aspmvc-chat-room\aspmvc-chat-room.Repository\bin\Debug\EntityFramework.dll
+C:\Users\Luis\source\repos\aspmvc-chat-room\aspmvc-chat-room\aspmvc-chat-room.Repository\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Luis\source\repos\aspmvc-chat-room\aspmvc-chat-room\aspmvc-chat-room.Repository\bin\Debug\EntityFramework.xml
+C:\Users\Luis\source\repos\aspmvc-chat-room\aspmvc-chat-room\aspmvc-chat-room.Repository\bin\Debug\EntityFramework.SqlServer.xml

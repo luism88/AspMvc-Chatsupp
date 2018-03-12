@@ -1,0 +1,81 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Index";
+}
+
+<h2>Site</h2>
+@section Scripts{
+    <script>
+        $(function () {
+
+            var visitorData = null;
+
+            var chatsuppHub = null;
+
+            var createChatBox = function (agentName) {
+                return $.ajax({
+                    url: "/Chatsupp/Visitor/ChatBoxVisitor",
+                    type: "GET",
+                    cache: false,
+                    contentType: "application/json",
+                    data: { title: agentName },
+                    success: function (resp) {
+                        $(".chatboxContainer").append(resp);
+                        $("#btnNameOk").click(registerVisitor);
+                        $("#chat form").submit();
+
+                    }
+                })
+            }
+
+            var sendMessage = function () {
+                chatsuppHub.server.registerUser(name);
+            }
+
+            var registerVisitor = function () {
+                console.log("gato")
+                var name = $("input[name='visitorName']").val();
+                chatsuppHub.server.registerUser(name);
+            }
+
+            var init = function () {
+
+                // Reference the auto-generated proxy for the hub.
+                chatsuppHub = $.connection.chatsuppHub;
+
+                // Start the connection.
+                $.connection.hub.start().done(function () {
+                    console.log("successful connection");
+
+                    createChatBox()
+
+                });
+                //ChtuHub callbacks
+                chatsuppHub.client.receiveMessage = function (agentName, message) {
+                    
+                    createChatBox().done(function () {
+                        alert(agentName + "says: " + message);
+                    });
+                };
+
+                chatsuppHub.client.registerResult = function (visitorData) {
+
+                    visitorData = visitorData;
+                    //aca agregar un coockie con el datos del usuario
+                    console.log(visitorData);
+                    $("input[name='message']").attr("disabled", false);
+                };
+
+
+                
+
+
+            }
+
+            init();
+
+        });
+
+    </script>
+}

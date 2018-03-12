@@ -1,0 +1,13 @@
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\bin\Debug\AspMvcChatsupp.DataAccess.dll.config
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\bin\Debug\AspMvcChatsupp.DataAccess.dll
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\bin\Debug\AspMvcChatsupp.DataAccess.pdb
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\bin\Debug\EntityFramework.dll
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\bin\Debug\EntityFramework.xml
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\obj\Debug\AspMvcChatsupp.DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\obj\Debug\AspMvcChatsupp.DataAccess.dll
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\obj\Debug\AspMvcChatsupp.DataAccess.pdb
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\obj\Debug\AspMvcChatsupp.DataAccess.Migrations.FirstData.resources
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\obj\Debug\AspMvcChatsupp.DataAccess.csproj.GenerateResource.Cache
+C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room.Repository\obj\Debug\AspMvcChatsupp.DataAccess.csprojResolveAssemblyReference.cache
