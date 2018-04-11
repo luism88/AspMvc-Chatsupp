@@ -1,0 +1,25 @@
+﻿@model IList<AspMvcChatsupp.DataAccess.Domain.ConnectionInfo>
+@{
+    Layout = null;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Machine</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr data-name="@item.Visitor.Name" data-conninfoid="@item.ConnectionInfoId">
+                <td>@item.Visitor.Name</td>
+                <td>@item.Visitor.Location</td>
+                <td>@item.Visitor.OperatingSystem</td>
+            </tr>
+
+        }
+    </tbody>
+</table>

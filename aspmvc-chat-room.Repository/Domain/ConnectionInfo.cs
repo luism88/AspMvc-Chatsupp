@@ -14,11 +14,9 @@ namespace AspMvcChatsupp.DataAccess.Domain
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int ConnectionInfoId { get; set; }
-        public string VisitorConnectionId { get; set; }
         public int VisitorId { get; set; }
         public Nullable<int> RoomId { get; set; }
         public Nullable<int> AgentId { get; set; }
-        public string AgentConnectionId { get; set; }
         public DateTime UserConnectionDate { get; set; }
         public Nullable<DateTime> AgentConnectionDate { get; set; }
         public Nullable<int> StateId { get; set; }

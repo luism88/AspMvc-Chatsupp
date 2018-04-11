@@ -9,6 +9,7 @@ namespace AspMvcChatsupp.MVC.Areas.Chatsupp.Models
     {
         public string Username { get; set; }
         public string Psw { get; set; }
+        public string ConnectionId { get; set; }
         public string MsgError { get; set; }
     }
 }

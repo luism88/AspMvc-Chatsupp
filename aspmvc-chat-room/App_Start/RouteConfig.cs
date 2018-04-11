@@ -16,7 +16,7 @@ namespace AspMvcChatsupp.MVC
             routes.MapRoute(
                 name: "Default",
                 url: "{area}/{controller}/{action}/{id}",
-                defaults: new { area = "Chatsupp", controller = "Chat", action = "Index", id = UrlParameter.Optional }
+                defaults: new { area = "Chatsupp", controller = "Login", action = "Login", id = UrlParameter.Optional }
             );
         }
     }

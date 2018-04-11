@@ -7,19 +7,41 @@ using System.Threading.Tasks;
 
 namespace AspMvcChatsupp.DataAccess
 {
-    public class RepUOW : IRepUOW
+    public class RepUOW : IRepUOW, IDisposable
     {
-        private ChatDBContext _db = new ChatDBContext();
-        private RepVisitor _repVisitor = null;
-        private RepAgent _repAgent = null;
-        private RepConnectionInfo _repConnectionInfo = null;
-        private RepRoom _repRoom = null;
-        private RepRoomEvent _repRoomEvent = null;
+        private ChatsuppContext _db = new ChatsuppContext();
+        private bool _disposed = false;
+        private RepVisitor _repVisitor;
+        private RepAgent _repAgent;
+        private RepConnectionInfo _repConnectionInfo;
+        private RepRoom _repRoom;
+        private RepRoomEvent _repRoomEvent;
+        private RepCurrentConnection _repCurrentConnection;
+
 
         public int SaveChanges()
         {
             return _db.SaveChanges();
         }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this._disposed)
+            {
+                if (disposing)
+                {
+                    _db.Dispose();
+                }
+            }
+            this._disposed = true;
+        }
+
 
         public RepVisitor RepVisitor
         {
@@ -56,5 +78,14 @@ namespace AspMvcChatsupp.DataAccess
                 return _repConnectionInfo ?? (_repConnectionInfo = new RepConnectionInfo(_db));
             }
         }
+        public RepCurrentConnection RepCurrentConnection
+        {
+            get
+            {
+                return _repCurrentConnection ?? (_repCurrentConnection = new RepCurrentConnection(_db));
+            }
+        }
+
+
     }
 }

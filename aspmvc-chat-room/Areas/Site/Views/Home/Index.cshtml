@@ -9,7 +9,7 @@
     <script>
         $(function () {
 
-            var visitorData = null;
+            var currentVisitor = window.localStorage.getItem("visitorId");
 
             var chatsuppHub = null;
 
@@ -22,21 +22,41 @@
                     data: { title: agentName },
                     success: function (resp) {
                         $(".chatboxContainer").append(resp);
-                        $("#btnNameOk").click(registerVisitor);
-                        $("#chat form").submit();
+                        if (window.localStorage.getItem("visitor_setName") != null) {
+                            $("#visitorName").remove();
+                            $("input[name='message']").attr("disabled", false);
+                        }
+                        else 
+                            $("#btnNameOk").click(setVisitorName);
+                        $(".chat form").submit(sendMessageToAgent);
 
                     }
                 })
             }
 
             var sendMessage = function () {
-                chatsuppHub.server.registerUser(name);
+                chatsuppHub.server.registerVisitor(name);
             }
 
-            var registerVisitor = function () {
-                console.log("gato")
+            var setVisitorName = function () {
                 var name = $("input[name='visitorName']").val();
-                chatsuppHub.server.registerUser(name);
+                chatsuppHub.server.setVisitorName(name);
+            }
+
+            var disconnect = function () {
+                chatsuppHub.server.visitorDisconnect(name).done(function () {
+                    $.connection.hub.stop().done(function () {
+                        console.log("disconnected");
+                    });
+                });
+                
+            }
+
+            var sendMessageToAgent = function (e) {
+
+                e.preventDefault();
+
+                chatsuppHub.server.sendToAgent($(this).find("input[name='message']").val());
             }
 
             var init = function () {
@@ -47,7 +67,7 @@
                 // Start the connection.
                 $.connection.hub.start().done(function () {
                     console.log("successful connection");
-
+                    chatsuppHub.server.registerVisitor(currentVisitor);
                     createChatBox()
 
                 });
@@ -59,17 +79,19 @@
                     });
                 };
 
-                chatsuppHub.client.registerResult = function (visitorData) {
+                chatsuppHub.client.registerResult = function (result) {
 
-                    visitorData = visitorData;
-                    //aca agregar un coockie con el datos del usuario
-                    console.log(visitorData);
+                    if (currentVisitor == null)
+                        window.localStorage.setItem("visitorId", result);
+                    
                     $("input[name='message']").attr("disabled", false);
                 };
 
+                chatsuppHub.client.setNameResult = function (result) {
 
+                    window.localStorage.setItem("visitor_setName", result);
                 
-
+                };
 
             }
 

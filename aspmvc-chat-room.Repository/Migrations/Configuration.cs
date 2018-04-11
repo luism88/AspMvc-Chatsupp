@@ -6,14 +6,14 @@ namespace AspMvcChatsupp.DataAccess.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<AspMvcChatsupp.DataAccess.ChatDBContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<AspMvcChatsupp.DataAccess.ChatsuppContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(AspMvcChatsupp.DataAccess.ChatDBContext context)
+        protected override void Seed(AspMvcChatsupp.DataAccess.ChatsuppContext context)
         {
             //  This method will be called after migrating to the latest version.
 

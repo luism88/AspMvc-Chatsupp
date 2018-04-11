@@ -47,21 +47,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChatDBContext.cs" />
+    <Compile Include="ChatsuppContext.cs" />
     <Compile Include="Domain\Agent.cs" />
     <Compile Include="Domain\ConnectionInfo.cs" />
+    <Compile Include="Domain\CurrentConnection.cs" />
     <Compile Include="Domain\EventType.cs" />
     <Compile Include="Domain\Room.cs" />
     <Compile Include="Domain\RoomEvent.cs" />
     <Compile Include="Domain\State.cs" />
     <Compile Include="Domain\Visitor.cs" />
-    <Compile Include="Migrations\201803102157429_FirstData.cs" />
-    <Compile Include="Migrations\201803102157429_FirstData.Designer.cs">
-      <DependentUpon>201803102157429_FirstData.cs</DependentUpon>
+    <Compile Include="Migrations\201804040418379_InitialData.cs" />
+    <Compile Include="Migrations\201804040418379_InitialData.Designer.cs">
+      <DependentUpon>201804040418379_InitialData.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repository\RepAgent.cs" />
     <Compile Include="Repository\RepConnectionInfo.cs" />
+    <Compile Include="Repository\RepCurrentConnection.cs" />
     <Compile Include="Repository\RepRoomEvent.cs" />
     <Compile Include="Repository\RepRoom.cs" />
     <Compile Include="Repository\RepVisitor.cs" />
@@ -76,8 +78,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201803102157429_FirstData.resx">
-      <DependentUpon>201803102157429_FirstData.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201804040418379_InitialData.resx">
+      <DependentUpon>201804040418379_InitialData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

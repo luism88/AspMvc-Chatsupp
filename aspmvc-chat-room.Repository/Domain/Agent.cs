@@ -11,6 +11,10 @@ namespace AspMvcChatsupp.DataAccess.Domain
     [Table("Agents")]
     public class Agent
     {
+        public Agent()
+        {
+            this.CurrentConnections = new List<CurrentConnection>();
+        }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int AgenteId { get; set; }
@@ -18,7 +22,9 @@ namespace AspMvcChatsupp.DataAccess.Domain
         public string Username { get; set; }
         public string Password { get; set; }
         public int RoomId { get; set; }
+
         [ForeignKey("RoomId")]
         public virtual Room Room { get; set; }
+        public virtual ICollection<CurrentConnection> CurrentConnections { get; set; }
     }
 }

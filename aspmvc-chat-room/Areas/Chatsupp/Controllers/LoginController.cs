@@ -1,8 +1,10 @@
-﻿using AspMvcChatsupp.MVC.Areas.Chatsupp.Models;
+﻿using AspMvcChatsupp.DataAccess.Domain;
+using AspMvcChatsupp.MVC.Areas.Chatsupp.Models;
 using AspMvcChatsupp.MVC.Controllers;
 using AspMvcChatsupp.MVC.Helpers;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace AspMvcChatsupp.MVC.Areas.Chatsupp.Controllers
 {
@@ -16,13 +18,20 @@ namespace AspMvcChatsupp.MVC.Areas.Chatsupp.Controllers
         [HttpPost]
         public ActionResult LoginResult(LoginModel model)
         {
-            var usr = Rep.RepAgent.FindBy(agent => agent.Username == model.Username && agent.Password == model.Psw)
+            var agent = RepSingleton.Rep.RepAgent.FindBy(ag => ag.Username == model.Username && ag.Password == model.Psw)
                         .FirstOrDefault();
-            if (usr != null)
+            if (agent != null)
             {
-                SessionHelper.AgentName = usr.Name;
-                SessionHelper.AgentId = usr.AgenteId;
-                return RedirectToAction("Index", "Admin", "Chatsupp");
+                FormsAuthentication.SetAuthCookie(model.Username, true);
+                SessionHelper.AgentName = agent.Name;
+                SessionHelper.AgentId = agent.AgenteId;
+                agent.CurrentConnections.Add(new CurrentConnection
+                {
+                    ConnectionId = model.ConnectionId
+                });
+                RepSingleton.Rep.RepAgent.Edit(agent);
+                RepSingleton.Rep.SaveChanges();
+                return RedirectToAction("Dashboard", "Admin", "Chatsupp");
             }
             else
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AspMvcChatsupp.DataAccess.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,18 @@ namespace AspMvcChatsupp.DataAccess
     public interface IRepUOW
     {
         int SaveChanges();
+
+        RepVisitor RepVisitor { get; }
+        
+        RepAgent RepAgent { get; }
+      
+        RepRoom RepRoom { get; }
+        
+        RepRoomEvent RepRoomEvent { get; }
+        
+        RepConnectionInfo RepConnectionInfo { get; }
+       
+        RepCurrentConnection RepCurrentConnection { get; }
+        
     }
 }
