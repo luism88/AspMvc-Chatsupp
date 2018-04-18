@@ -23,6 +23,7 @@ namespace AspMvcChatsupp.DataAccess.Domain
         public string Location { get; set; }
 
         public virtual ICollection<CurrentConnection> CurrentConnections { get; set; }
-   
+        public virtual ICollection<MessageHistory> MessageHistory { get; set; }
+
     }
 }

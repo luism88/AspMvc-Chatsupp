@@ -9,16 +9,19 @@
             <th>Name</th>
             <th>Address</th>
             <th>Machine</th>
+            <th>Estado</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr data-name="@item.Visitor.Name" data-conninfoid="@item.ConnectionInfoId">
-                <td>@item.Visitor.Name</td>
-                <td>@item.Visitor.Location</td>
-                <td>@item.Visitor.OperatingSystem</td>
-            </tr>
+        <tr data-name="@item.Visitor.Name" data-conninfoid="@item.ConnectionInfoId">
+            <td>@item.Visitor.Name</td>
+            <td>@item.Visitor.Location</td>
+            <td>@item.Visitor.OperatingSystem</td>
+            <td>@item.State.Name</td>
+            
+        </tr>
 
         }
     </tbody>

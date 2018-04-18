@@ -14,11 +14,11 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
     //[Authorize]
     public class ChatsuppHub : Hub
     {
-        private readonly IRepUOW _repository;
+        private readonly IRepUOW _rep;
 
         public ChatsuppHub(IRepUOW rep)
         {
-            this._repository = rep;
+            this._rep = rep;
         }
 
         #region Visitor
@@ -33,15 +33,15 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
                     Name = "Anonymous"
 
                 };
-                _repository.RepVisitor.Add(connectedUser);
+                _rep.RepVisitor.Add(connectedUser);
 
             }
             else
-                connectedUser = _repository.RepVisitor.FindBy(visitor => visitor.VisitorId == visitorId).FirstOrDefault();
+                connectedUser = _rep.RepVisitor.FindBy(visitor => visitor.VisitorId == visitorId).FirstOrDefault();
 
             connectedUser.CurrentConnections.Add(new CurrentConnection { ConnectionId = Context.ConnectionId });
 
-            var connInfo = _repository.RepConnectionInfo.FindBy(conn => conn.VisitorId == visitorId && conn.StateId == 1).FirstOrDefault();
+            var connInfo = _rep.RepConnectionInfo.FindBy(conn => conn.VisitorId == visitorId && conn.StateId == 1).FirstOrDefault();
 
             if(connInfo == null)
             {
@@ -53,11 +53,11 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
                     RoomId = 1
 
                 };
-                _repository.RepConnectionInfo.Add(connInfo);
+                _rep.RepConnectionInfo.Add(connInfo);
                 
             }
 
-            _repository.SaveChanges();
+            _rep.SaveChanges();
             Clients.Caller.registerResult(connectedUser.VisitorId);
 
             //actualiza lista de visitantes en el panel de agentes.
@@ -67,36 +67,39 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
 
         public void SetVisitorName(string name)
         {
-            var visitor = _repository.RepVisitor
+            var visitor = _rep.RepVisitor
                                     .FindBy(vis => vis.CurrentConnections
                                                         .Select(conn => conn.ConnectionId)
                                                         .Contains(Context.ConnectionId))
                                     .FirstOrDefault();
             visitor.Name = name;
-            _repository.RepVisitor.Edit(visitor);
-            _repository.SaveChanges();
+            _rep.RepVisitor.Edit(visitor);
+            _rep.SaveChanges();
 
-            Clients.Caller.setNameResult(_repository.SaveChanges() > 0);
+            Clients.Caller.setNameResult(_rep.SaveChanges() > 0);
         }
 
         public void SendToAgent(string message)
         {
-            var connInfo = _repository.RepConnectionInfo
+            var connInfo = _rep.RepConnectionInfo
                                             .FindBy(conn => conn.StateId == 1 && conn.Visitor.CurrentConnections.Any(curr => curr.ConnectionId == Context.ConnectionId))
                                             .FirstOrDefault();
-                                            
-            var agentConnections = connInfo.Agente.CurrentConnections.Select(curr => curr.ConnectionId).ToList();
-
-
-            Clients.Clients(agentConnections).receiveVisitorMessage(connInfo.Visitor.Name, message);
+            if(connInfo.Agente != null)
+            {
+                var agentConnections = connInfo.Agente.CurrentConnections.Select(curr => curr.ConnectionId).ToList();
+                Clients.Clients(agentConnections).receiveVisitorMessage(connInfo.Visitor.Name, message);
+            }                               
+           //else solo guardar en historial
         }
+
+
         
         #endregion
 
         #region Agent
         public void RegisterAgent()
         {
-            var agent = _repository.RepAgent.FindBy(agt => agt.Username == Context.User.Identity.Name).FirstOrDefault();
+            var agent = _rep.RepAgent.FindBy(agt => agt.Username == Context.User.Identity.Name).FirstOrDefault();
 
             if (agent != null)
             {
@@ -104,30 +107,30 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
                 {
                     ConnectionId = Context.ConnectionId
                 });
-                _repository.RepAgent.Edit(agent);
-                _repository.SaveChanges();
+                _rep.RepAgent.Edit(agent);
+                _rep.SaveChanges();
             }
         }
 
         public void SendToVisitor(int connInfoId, string message)
         {
-            var connInfo = _repository.RepConnectionInfo.FindBy(conn => conn.ConnectionInfoId == connInfoId).FirstOrDefault();
+            var connInfo = _rep.RepConnectionInfo.FindBy(conn => conn.ConnectionInfoId == connInfoId).FirstOrDefault();
 
             var visitorCurrentConnections = connInfo.Visitor.CurrentConnections.Select(cliConn => cliConn.ConnectionId).ToList();
 
-            var agent = _repository.RepAgent.FindBy(agt => agt.Username == Context.User.Identity.Name).FirstOrDefault();
+            var agent = _rep.RepAgent.FindBy(agt => agt.Username == Context.User.Identity.Name).FirstOrDefault();
 
-            connInfo.AgentId = agent.AgenteId;
+            connInfo.AgentId = agent.AgentId;
 
-            _repository.RepConnectionInfo.Edit(connInfo);
-            _repository.SaveChanges();
+            _rep.RepConnectionInfo.Edit(connInfo);
+            _rep.SaveChanges();
 
             Clients.Clients(visitorCurrentConnections).receiveMessage(connInfo.Agente.Name, message);
         }
 
         private void _RefreshVisitorList()
         {
-            Clients.Clients(_repository.RepAgent.GetAll()
+            Clients.Clients(_rep.RepAgent.GetAll()
                                            .SelectMany(vis => vis.CurrentConnections)
                                            .Select(conn => conn.ConnectionId)
                                            .ToList())
@@ -138,14 +141,14 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
         //overrides
         public override Task OnDisconnected(bool stopCalled)
         {
-            var currentConn = _repository.RepCurrentConnection.FindBy(conn => conn.ConnectionId == Context.ConnectionId).FirstOrDefault();
+            var currentConn = _rep.RepCurrentConnection.FindBy(conn => conn.ConnectionId == Context.ConnectionId).FirstOrDefault();
 
             // es un id de visitante?
             if (currentConn.Visitors != null)
             {
                 if (currentConn.Visitors.CurrentConnections.Count == 1)
                 {
-                    var connectionInfo = _repository.RepConnectionInfo
+                    var connectionInfo = _rep.RepConnectionInfo
                                             .FindBy(connInfo => connInfo.VisitorId == currentConn.VisitorId)
                                             .OrderByDescending(ord => ord.ConnectionInfoId)
                                             .FirstOrDefault();
@@ -153,8 +156,8 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
                 }
             }
 
-            _repository.RepCurrentConnection.Delete(currentConn);
-            _repository.SaveChanges();
+            _rep.RepCurrentConnection.Delete(currentConn);
+            _rep.SaveChanges();
             _RefreshVisitorList();
 
             return base.OnDisconnected(stopCalled);

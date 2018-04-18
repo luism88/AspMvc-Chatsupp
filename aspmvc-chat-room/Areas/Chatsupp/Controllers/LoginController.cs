@@ -24,7 +24,7 @@ namespace AspMvcChatsupp.MVC.Areas.Chatsupp.Controllers
             {
                 FormsAuthentication.SetAuthCookie(model.Username, true);
                 SessionHelper.AgentName = agent.Name;
-                SessionHelper.AgentId = agent.AgenteId;
+                SessionHelper.AgentId = agent.AgentId;
                 agent.CurrentConnections.Add(new CurrentConnection
                 {
                     ConnectionId = model.ConnectionId

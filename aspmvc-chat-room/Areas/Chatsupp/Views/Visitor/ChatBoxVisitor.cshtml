@@ -1,7 +1,29 @@
 ﻿@model AspMvcChatsupp.MVC.Areas.Chatsupp.Models.ChatBoxModel
 
 <link href="~/Content/css/areas/chatsupp/chatbox.css" rel="stylesheet" />
-
+<div>
+    <header class="clearfix">
+        <a class="chat-close" href="#">x</a>
+        <h4>Support</h4>
+    </header>
+    <div class="chat">
+        <div class="chat-history"></div>
+        <fieldset id="visitorName">
+            <div class="input-group">
+                <input class="form-control" name="visitorName" placeholder="Your name...">
+                <span class="input-group-btn">
+                    <button class="btn btn-info" id="btnNameOk">Ok</button>
+                </span>
+            </div>
+        </fieldset>
+        <p class="chat-feedback" style="display:none;">Your partner is typing…</p>
+        <div action="" method="post">
+            <fieldset>
+                <input type="text" placeholder="Type your message…" autofocus="autofocus">
+            </fieldset>
+        </div>
+    </div>
+</div>
 <div id="live-chat">
 
     <header class="clearfix">

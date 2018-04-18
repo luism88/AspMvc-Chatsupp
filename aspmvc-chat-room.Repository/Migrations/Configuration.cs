@@ -24,11 +24,12 @@ namespace AspMvcChatsupp.DataAccess.Migrations
                 new Room { RoomId = 1, Name = "Argentina" }
             );
             context.Agents.AddOrUpdate(
-             new Agent { AgenteId = 1, Name = "Admin", Username="admin", Password="admin", RoomId = 1 }
+             new Agent { AgentId = 1, Name = "Admin", Username="admin", Password="admin", RoomId = 1 }
             );
             context.States.AddOrUpdate(
                 new State { StateId = 1, Name = "Connected"},
-                new State { StateId = 2, Name = "Disconnected"}
+                new State { StateId = 2, Name = "Disconnected"},
+                new State { StateId = 3, Name = "Waiting Answer" }
             );
 
         }

@@ -210,6 +210,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\areas\chatsupp\chatbox.css" />
     <Content Include="Content\css\areas\chatsupp\login.css" />
+    <Content Include="Content\img\avatarSupport.png" />
+    <Content Include="Content\img\avatarVisitor.png" />
     <Content Include="Content\js\areas\chatsupp\chatbox.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

@@ -6,33 +6,78 @@
 
 <h2>Site</h2>
 @section Scripts{
-    <script>
+<script>
         $(function () {
+
+            var chatbox = {
+                $divChat:null,
+                create: function () {
+                    this.$divChat = $("<div>", { id: "live-chat" });
+
+                    var header = $("<header>", { class: "clearfix" });
+                    var body = $("<div>", { class:"chat" })
+                    var fsVisitorName = $("<fieldset>", { id: "visitorName" });
+                    var divGroup = $("<div>", { class: "input-group" });
+                    console.log(window.localStorage.getItem("visitor_setName"))
+                    if (window.localStorage.getItem("visitor_setName") != 'false') {
+                        divGroup.append($("<input>", { class: "form-control", name: "visitorName", placeholder: "Your name..." }));
+                        divGroup.append($("<span>", { class: "input-group-btn" }).append($("<button>", { class: "btn btn-info", id: "btnNameOk" }).html("Ok").click(setVisitorName)))
+                    }
+                    
+                    fsVisitorName.append(divGroup);
+
+                    header.append($("<a>", { class: "chat-close", href: "#" }).html("x").on('click', function (e) {
+
+                        e.preventDefault();
+                        $('#live-chat').fadeOut(300);
+
+                    }));
+                    header.append($("<h4>").html("Support"));
+                    header.on('click', function () {
+
+                        $('.chat').slideToggle(300, 'swing');
+                        $('.chat-message-counter').fadeToggle(300, 'swing');
+
+                    });
+
+                    body.append($("<div>", { class: "chat-history" }));
+                    body.append(fsVisitorName);
+                    body.append($("<p>", { class: "chat-feedback", style: "display:none;" }).html("Your partner is typing…"));
+                    var formChatbox = $("<form>", { id: "frmChatbox", action: "", method: "post" })
+                        .append($("<fieldset>")
+                            .append($("<input>", { type: "text", name: "newMessage", placeholder: "Type your message…", autofocus: true })));
+                    formChatbox.submit(sendMessageToAgent);
+                    body.append(formChatbox)
+
+                    this.$divChat.append(header);
+                    this.$divChat.append(body);
+
+                    $(".chatboxContainer").append(this.$divChat);
+                },
+                newChatMessage: function (who, message) {
+                    var pathAvatar = who == "you"
+                        ?"../../Content/img/avatarVisitor.png"
+                        :"../../Content/img/avatarSupport.png";
+                    var divMessage = $("<div>", { class: "chat-message clearfix" });
+                    var imgAvatar = $("<img>", { src: pathAvatar,width:"32",height:"32"})
+                    var divMessageContent = $("<div>", { class: "chat-message-content clearfix" })
+
+                    divMessageContent.append($("<span>", { class: "chat-time" }).html( prettyDate(new Date().toISOString())))
+                    divMessageContent.append($("<h5>").html(who));
+                    divMessageContent.append($("<p>").html(message));
+
+                    divMessage.append(imgAvatar);
+                    divMessage.append(divMessageContent);
+                    this.$divChat.find("div .chat-history").append(divMessage);
+                    this.$divChat.find("div .chat-history").append($("<hr>"));
+                }
+            }
 
             var currentVisitor = window.localStorage.getItem("visitorId");
 
             var chatsuppHub = null;
 
-            var createChatBox = function (agentName) {
-                return $.ajax({
-                    url: "/Chatsupp/Visitor/ChatBoxVisitor",
-                    type: "GET",
-                    cache: false,
-                    contentType: "application/json",
-                    data: { title: agentName },
-                    success: function (resp) {
-                        $(".chatboxContainer").append(resp);
-                        if (window.localStorage.getItem("visitor_setName") != null) {
-                            $("#visitorName").remove();
-                            $("input[name='message']").attr("disabled", false);
-                        }
-                        else 
-                            $("#btnNameOk").click(setVisitorName);
-                        $(".chat form").submit(sendMessageToAgent);
 
-                    }
-                })
-            }
 
             var sendMessage = function () {
                 chatsuppHub.server.registerVisitor(name);
@@ -49,14 +94,21 @@
                         console.log("disconnected");
                     });
                 });
-                
+
             }
 
             var sendMessageToAgent = function (e) {
 
                 e.preventDefault();
-
-                chatsuppHub.server.sendToAgent($(this).find("input[name='message']").val());
+                var frm = $(this);
+                var message = frm.find("input[name='newMessage']").val();
+                if (message != null || message != "") {
+                    chatsuppHub.server.sendToAgent(message).done(function () {
+                        chatbox.newChatMessage("you", message);
+                        frm.trigger("reset");
+                    });
+                }
+                
             }
 
             var init = function () {
@@ -68,36 +120,77 @@
                 $.connection.hub.start().done(function () {
                     console.log("successful connection");
                     chatsuppHub.server.registerVisitor(currentVisitor);
-                    createChatBox()
+                    chatbox.create();
 
                 });
                 //ChtuHub callbacks
                 chatsuppHub.client.receiveMessage = function (agentName, message) {
-                    
-                    createChatBox().done(function () {
-                        alert(agentName + "says: " + message);
-                    });
+                    //alert(agentName + "says: " + message);
+                    chatbox.newChatMessage(agentName, message);
                 };
 
                 chatsuppHub.client.registerResult = function (result) {
 
                     if (currentVisitor == null)
                         window.localStorage.setItem("visitorId", result);
-                    
+
                     $("input[name='message']").attr("disabled", false);
                 };
 
                 chatsuppHub.client.setNameResult = function (result) {
 
                     window.localStorage.setItem("visitor_setName", result);
-                
+
                 };
 
             }
+            // Takes an ISO time and returns a string representing how
+            // long ago the date represents.
+            function prettyDate(time) {
+                var date = new Date((time || "").replace(/-/g, "/").replace(/[TZ]/g, " ")),
+                    diff = (((new Date()).getTime() - date.getTime()) / 1000),
+                    day_diff = Math.floor(diff / 86400);
 
+                if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) return;
+
+                return day_diff == 0 && (
+                    diff < 60 && "just now" ||
+                    diff < 120 && "1 minute ago" ||
+                    diff < 3600 && Math.floor(diff / 60) + " minutes ago" ||
+                    diff < 7200 && "1 hour ago" ||
+                    diff < 86400 && Math.floor(diff / 3600) + " hours ago") ||
+                    day_diff == 1 && "Yesterday" ||
+                    day_diff < 7 && day_diff + " days ago" ||
+                    day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago";
+            }
             init();
 
         });
 
-    </script>
+        
+
+        /*
+         var createChatBox = function (agentName) {
+                return $.ajax({
+                    url: "/Chatsupp/Visitor/ChatBoxVisitor",
+                    type: "GET",
+                    cache: false,
+                    contentType: "application/json",
+                    data: { title: agentName },
+                    success: function (resp) {
+                        $(".chatboxContainer").append(resp);
+                        if (window.localStorage.getItem("visitor_setName") != null) {
+                            $("#visitorName").remove();
+                            $("input[name='message']").attr("disabled", false);
+                        }
+                        else
+                            $("#btnNameOk").click(setVisitorName);
+                            $(".chat form").submit(sendMessageToAgent);
+
+                    }
+                })
+            }
+        */
+
+</script>
 }
