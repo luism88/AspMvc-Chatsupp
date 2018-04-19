@@ -7,13 +7,13 @@ namespace AspMvcChatsupp.DataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.0.0-20911")]
-    public sealed partial class InitData : IMigrationMetadata
+    public sealed partial class InitialData : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitData));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialData));
         
         string IMigrationMetadata.Id
         {
-            get { return "201804180503216_InitData"; }
+            get { return "201804190037490_InitialData"; }
         }
         
         string IMigrationMetadata.Source

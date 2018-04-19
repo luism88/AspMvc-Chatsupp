@@ -84,6 +84,17 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
             var connInfo = _rep.RepConnectionInfo
                                             .FindBy(conn => conn.StateId == 1 && conn.Visitor.CurrentConnections.Any(curr => curr.ConnectionId == Context.ConnectionId))
                                             .FirstOrDefault();
+            connInfo.Visitor.MessageHistory.Add(new MessageHistory
+            {
+                Agent = connInfo.Agente,
+                Visitor = connInfo.Visitor,
+                Message = message,
+                Date = DateTime.Now,
+                FromAgent = false
+
+            });
+            _rep.SaveChanges();
+
             if(connInfo.Agente != null)
             {
                 var agentConnections = connInfo.Agente.CurrentConnections.Select(curr => curr.ConnectionId).ToList();

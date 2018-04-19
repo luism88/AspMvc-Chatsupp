@@ -57,9 +57,9 @@
     <Compile Include="Domain\RoomEvent.cs" />
     <Compile Include="Domain\State.cs" />
     <Compile Include="Domain\Visitor.cs" />
-    <Compile Include="Migrations\201804180503216_InitData.cs" />
-    <Compile Include="Migrations\201804180503216_InitData.Designer.cs">
-      <DependentUpon>201804180503216_InitData.cs</DependentUpon>
+    <Compile Include="Migrations\201804190037490_InitialData.cs" />
+    <Compile Include="Migrations\201804190037490_InitialData.Designer.cs">
+      <DependentUpon>201804190037490_InitialData.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repository\RepAgent.cs" />
@@ -79,8 +79,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201804180503216_InitData.resx">
-      <DependentUpon>201804180503216_InitData.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201804190037490_InitialData.resx">
+      <DependentUpon>201804190037490_InitialData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -15,10 +15,11 @@ namespace AspMvcChatsupp.DataAccess.Domain
         [Key]
         public int MessageHistoryId { get; set; }
         public int VisitorId { get; set; }
-        public int AgentId { get; set; }
+        public Nullable<int> AgentId { get; set; }
         public string Message { get; set; }
         public DateTime Date { get; set; }
-        public bool IsAgentMessage { get; set; }
+        public bool FromAgent { get; set; }
+
 
         [ForeignKey("AgentId")]
         public virtual Agent Agent { get; set; }
