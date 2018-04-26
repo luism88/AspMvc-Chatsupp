@@ -8,22 +8,23 @@ using System.Threading.Tasks;
 
 namespace AspMvcChatsupp.DataAccess.Domain
 {
-    [Table("MessageHistory")]
-    public class MessageHistory
+    [Table("ChatHistory")]
+    public class ChatHistory
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int MessageHistoryId { get; set; }
         public int VisitorId { get; set; }
         public Nullable<int> AgentId { get; set; }
-        public string Message { get; set; }
+        public EnumEventType EventTypeId { get; set; }
+        public string Value { get; set; }
         public DateTime Date { get; set; }
-        public bool FromAgent { get; set; }
-
-
+       
         [ForeignKey("AgentId")]
         public virtual Agent Agent { get; set; }
         [ForeignKey("VisitorId")]
         public virtual Visitor Visitor { get; set; }
+        [ForeignKey("EventTypeId")]
+        public virtual EventType EventType { get; set; }
     }
 }

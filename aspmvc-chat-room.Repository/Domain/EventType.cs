@@ -8,12 +8,20 @@ using System.Threading.Tasks;
 
 namespace AspMvcChatsupp.DataAccess.Domain
 {
+    public enum EnumEventType
+    {
+        AgentConnected,
+        AgentDisconnected,
+        AgentMessage,
+        VisitorConnected,
+        VisitorDisconected,
+        VisitorMessage
+    }
     [Table("EventsType")]
     public class EventType
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int EventTypeId { get; set; }
+        public EnumEventType EventTypeId { get; set; }
         public string Name { get; set; }
         public string LegendTemplate { get; set; }
     }

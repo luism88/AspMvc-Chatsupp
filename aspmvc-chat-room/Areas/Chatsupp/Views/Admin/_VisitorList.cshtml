@@ -1,4 +1,4 @@
-﻿@model IList<AspMvcChatsupp.DataAccess.Domain.ConnectionInfo>
+﻿@model IList<AspMvcChatsupp.DataAccess.Domain.Visitor>
 @{
     Layout = null;
 }
@@ -15,10 +15,10 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr data-name="@item.Visitor.Name" data-conninfoid="@item.ConnectionInfoId">
-            <td>@item.Visitor.Name</td>
-            <td>@item.Visitor.Location</td>
-            <td>@item.Visitor.OperatingSystem</td>
+        <tr data-name="@item.Name" data-conninfoid="@item.VisitorId">
+            <td>@item.Name</td>
+            <td>@item.ConnectionLogs.LastOrDefault().Location</td>
+            <td>@item.ConnectionLogs.LastOrDefault().OperatingSystem</td>
             <td>@item.State.Name</td>
             
         </tr>

@@ -12,10 +12,9 @@ namespace AspMvcChatsupp.DataAccess
         }
 
         public DbSet<Agent> Agents { get; set; }
-        public DbSet<ConnectionInfo> ConnectionsInfo { get; set; }
+        public DbSet<ConnectionLog> ConnectionsInfo { get; set; }
         public DbSet<EventType> EventTypes { get; set; }
-        public DbSet<Room> Rooms { get; set; }
-        public DbSet<RoomEvent> RoomEvents { get; set; }
+        public DbSet<Group> Rooms { get; set; }
         public DbSet<State> States { get; set; }
         public DbSet<Visitor> Users { get; set; }
 

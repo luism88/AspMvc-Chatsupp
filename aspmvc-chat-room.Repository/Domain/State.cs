@@ -8,11 +8,17 @@ using System.Threading.Tasks;
 
 namespace AspMvcChatsupp.DataAccess.Domain
 {
+    public enum EnumState
+    {
+        Connected,
+        Disconnected,
+        WaitingAnswer
+    }
     [Table("States")]
     public class State
     {
         [Key]
-        public int StateId { get; set; }
+        public EnumState StateId { get; set; }
         public string Name { get; set; }
     }
 }

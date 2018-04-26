@@ -70,6 +70,8 @@ C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room\obj\Debug\AspMvcChats
 C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room\obj\Debug\AspMvcChatsupp.MVC.csproj.CoreCompileInputs.cache
 C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room\obj\Debug\AspMvcChatsupp.MVC.dll
 C:\Users\Luis\source\repos\AspMvcChatsupp\aspmvc-chat-room\obj\Debug\AspMvcChatsupp.MVC.pdb
+C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\obj\Debug\AspMvcChatsupp.MVC.csprojResolveAssemblyReference.cache
+C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\obj\Debug\AspMvcChatsupp.MVC.csproj.CoreCompileInputs.cache
 C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\bin\ApplicationInsights.config
 C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\bin\AspMvcChatsupp.MVC.dll.config
 C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\bin\AspMvcChatsupp.MVC.dll
@@ -147,7 +149,5 @@ C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\bin\es\System.Web.Ra
 C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\bin\es\System.Web.WebPages.resources.dll
 C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\bin\es\System.Web.WebPages.Deployment.resources.dll
 C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\bin\es\System.Web.WebPages.Razor.resources.dll
-C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\obj\Debug\AspMvcChatsupp.MVC.csprojResolveAssemblyReference.cache
-C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\obj\Debug\AspMvcChatsupp.MVC.csproj.CoreCompileInputs.cache
 C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\obj\Debug\AspMvcChatsupp.MVC.dll
 C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room\obj\Debug\AspMvcChatsupp.MVC.pdb

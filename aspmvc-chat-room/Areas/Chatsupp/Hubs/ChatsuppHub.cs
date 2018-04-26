@@ -24,9 +24,10 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
         #region Visitor
         public void RegisterVisitor(int? visitorId)
         {
-            Visitor connectedUser;
-
-            if (visitorId == null)
+            Visitor connectedUser = _rep.RepVisitor.FindBy(visitor => visitor.VisitorId == visitorId).FirstOrDefault();
+            
+            //to-do verificacion por email
+            if (connectedUser == null)
             {
                 connectedUser = new Visitor
                 {
@@ -36,28 +37,24 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
                 _rep.RepVisitor.Add(connectedUser);
 
             }
-            else
-                connectedUser = _rep.RepVisitor.FindBy(visitor => visitor.VisitorId == visitorId).FirstOrDefault();
-
             connectedUser.CurrentConnections.Add(new CurrentConnection { ConnectionId = Context.ConnectionId });
-
-            var connInfo = _rep.RepConnectionInfo.FindBy(conn => conn.VisitorId == visitorId && conn.StateId == 1).FirstOrDefault();
-
-            if(connInfo == null)
+            connectedUser.StateId = EnumState.Connected;
+            connectedUser.ConnectionLogs.Add(new ConnectionLog
             {
-                connInfo = new ConnectionInfo
-                {
-                    Visitor = connectedUser,
-                    UserConnectionDate = DateTime.Now,
-                    StateId = 1, // connected
-                    RoomId = 1
+                Visitor = connectedUser,
+                UserConnectionDate = DateTime.Now,
+                GroupId = 1
 
-                };
-                _rep.RepConnectionInfo.Add(connInfo);
-                
-            }
+            });
+            connectedUser.MessageHistory.Add(new ChatHistory
+            {
+                Date = DateTime.Now,
+                EventTypeId = EnumEventType.VisitorConnected,
+
+            });
 
             _rep.SaveChanges();
+
             Clients.Caller.registerResult(connectedUser.VisitorId);
 
             //actualiza lista de visitantes en el panel de agentes.
@@ -81,29 +78,27 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
 
         public void SendToAgent(string message)
         {
-            var connInfo = _rep.RepConnectionInfo
-                                            .FindBy(conn => conn.StateId == 1 && conn.Visitor.CurrentConnections.Any(curr => curr.ConnectionId == Context.ConnectionId))
-                                            .FirstOrDefault();
-            connInfo.Visitor.MessageHistory.Add(new MessageHistory
+            var visitor = _rep.RepCurrentConnection.GetAll().Where(curr => curr.ConnectionId == Context.ConnectionId).FirstOrDefault().Visitor;
+            
+            visitor.MessageHistory.Add(new ChatHistory
             {
-                Agent = connInfo.Agente,
-                Visitor = connInfo.Visitor,
-                Message = message,
+                AgentId = visitor.AssignedAgentId,
+                Visitor = visitor,
+                Value = message,
                 Date = DateTime.Now,
-                FromAgent = false
+                EventTypeId = EnumEventType.VisitorMessage,
 
             });
             _rep.SaveChanges();
 
-            if(connInfo.Agente != null)
+            if(visitor.AssignedAgent != null)
             {
-                var agentConnections = connInfo.Agente.CurrentConnections.Select(curr => curr.ConnectionId).ToList();
-                Clients.Clients(agentConnections).receiveVisitorMessage(connInfo.Visitor.Name, message);
+                var agentConnections = visitor.AssignedAgent.CurrentConnections.Select(curr => curr.ConnectionId).ToList();
+                Clients.Clients(agentConnections).receiveVisitorMessage(visitor.Name, message);
             }                               
-           //else solo guardar en historial
+           
         }
-
-
+        
         
         #endregion
 
@@ -123,20 +118,26 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
             }
         }
 
-        public void SendToVisitor(int connInfoId, string message)
+        public void SendToVisitor(int visitorId, string message)
         {
-            var connInfo = _rep.RepConnectionInfo.FindBy(conn => conn.ConnectionInfoId == connInfoId).FirstOrDefault();
+            var visitor = _rep.RepVisitor.FindBy(vis => vis.VisitorId == visitorId).FirstOrDefault();
 
-            var visitorCurrentConnections = connInfo.Visitor.CurrentConnections.Select(cliConn => cliConn.ConnectionId).ToList();
+            var visitorCurrentConnections = visitor.CurrentConnections.Select(cliConn => cliConn.ConnectionId).ToList();
 
-            var agent = _rep.RepAgent.FindBy(agt => agt.Username == Context.User.Identity.Name).FirstOrDefault();
+            var agentLogged = _rep.RepAgent.FindBy(agt => agt.Username == Context.User.Identity.Name).FirstOrDefault();
 
-            connInfo.AgentId = agent.AgentId;
+            agentLogged.MessageHistory.Add(new ChatHistory
+            {
+                AgentId = visitor.AssignedAgentId,
+                Visitor = visitor,
+                Value = message,
+                Date = DateTime.Now,
+                EventTypeId = EnumEventType.AgentMessage,
 
-            _rep.RepConnectionInfo.Edit(connInfo);
+            });
             _rep.SaveChanges();
 
-            Clients.Clients(visitorCurrentConnections).receiveMessage(connInfo.Agente.Name, message);
+            Clients.Clients(visitorCurrentConnections).receiveMessage(agentLogged.Name, message);
         }
 
         private void _RefreshVisitorList()
@@ -155,15 +156,18 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
             var currentConn = _rep.RepCurrentConnection.FindBy(conn => conn.ConnectionId == Context.ConnectionId).FirstOrDefault();
 
             // es un id de visitante?
-            if (currentConn.Visitors != null)
+            if (currentConn.Visitor != null)
             {
-                if (currentConn.Visitors.CurrentConnections.Count == 1)
+                if (currentConn.Visitor.CurrentConnections.Count == 1)
                 {
-                    var connectionInfo = _rep.RepConnectionInfo
-                                            .FindBy(connInfo => connInfo.VisitorId == currentConn.VisitorId)
-                                            .OrderByDescending(ord => ord.ConnectionInfoId)
-                                            .FirstOrDefault();
-                    connectionInfo.StateId = 2;
+                    currentConn.Visitor.StateId = EnumState.Disconnected;
+                    currentConn.Visitor.MessageHistory.Add(new ChatHistory
+                    {
+                        Visitor = currentConn.Visitor,
+                        Date = DateTime.Now,
+                        EventTypeId = EnumEventType.VisitorDisconected,
+
+                    });
                 }
             }
 

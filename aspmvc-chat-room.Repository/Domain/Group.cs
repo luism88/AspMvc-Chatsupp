@@ -8,22 +8,16 @@ using System.Threading.Tasks;
 
 namespace AspMvcChatsupp.DataAccess.Domain
 {
-    [Table("RoomEvents")]
-    public class RoomEvent
+    [Table("Groups")]
+    public class Group
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int RoomEventId { get; set; }
-        public int RoomId { get; set; }
-        public int EventTypeId { get; set; }
-        public int Date { get; set; }
+        public int GroupId { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
 
-        [ForeignKey("EventTypeId")]
-        public EventType EventType { get; set; }
-        [ForeignKey("RoomId")]
-        public virtual Room Room {get; set;}
-
-
+        public virtual ICollection<Agent> AdministratorAgents { get; set; }
+        public virtual ICollection<ConnectionLog> Connections { get; set; }
     }
 }

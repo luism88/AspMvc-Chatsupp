@@ -20,6 +20,6 @@ namespace AspMvcChatsupp.DataAccess.Domain
         [ForeignKey("AgentId")]
         public virtual Agent Agents { get; set; }
         [ForeignKey("VisitorId")]
-        public virtual Visitor Visitors { get; set; }
+        public virtual Visitor Visitor { get; set; }
     }
 }

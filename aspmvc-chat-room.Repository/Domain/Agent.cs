@@ -14,7 +14,7 @@ namespace AspMvcChatsupp.DataAccess.Domain
         public Agent()
         {
             this.CurrentConnections = new List<CurrentConnection>();
-            this.MessageHistory = new List<MessageHistory>();
+            this.MessageHistory = new List<ChatHistory>();
         }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
@@ -25,8 +25,8 @@ namespace AspMvcChatsupp.DataAccess.Domain
         public int RoomId { get; set; }
 
         [ForeignKey("RoomId")]
-        public virtual Room Room { get; set; }
+        public virtual Group Room { get; set; }
         public virtual ICollection<CurrentConnection> CurrentConnections { get; set; }
-        public virtual ICollection<MessageHistory> MessageHistory { get; set; }
+        public virtual ICollection<ChatHistory> MessageHistory { get; set; }
     }
 }

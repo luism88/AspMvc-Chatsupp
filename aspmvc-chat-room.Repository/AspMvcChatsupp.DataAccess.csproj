@@ -49,17 +49,16 @@
   <ItemGroup>
     <Compile Include="ChatsuppContext.cs" />
     <Compile Include="Domain\Agent.cs" />
-    <Compile Include="Domain\ConnectionInfo.cs" />
+    <Compile Include="Domain\ConnectionLog.cs" />
     <Compile Include="Domain\CurrentConnection.cs" />
     <Compile Include="Domain\EventType.cs" />
-    <Compile Include="Domain\MessageHistory.cs" />
-    <Compile Include="Domain\Room.cs" />
-    <Compile Include="Domain\RoomEvent.cs" />
+    <Compile Include="Domain\ChatHistory.cs" />
+    <Compile Include="Domain\Group.cs" />
     <Compile Include="Domain\State.cs" />
     <Compile Include="Domain\Visitor.cs" />
-    <Compile Include="Migrations\201804190037490_InitialData.cs" />
-    <Compile Include="Migrations\201804190037490_InitialData.Designer.cs">
-      <DependentUpon>201804190037490_InitialData.cs</DependentUpon>
+    <Compile Include="Migrations\201804252316382_InitData.cs" />
+    <Compile Include="Migrations\201804252316382_InitData.Designer.cs">
+      <DependentUpon>201804252316382_InitData.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repository\RepAgent.cs" />
@@ -79,8 +78,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201804190037490_InitialData.resx">
-      <DependentUpon>201804190037490_InitialData.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201804252316382_InitData.resx">
+      <DependentUpon>201804252316382_InitData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

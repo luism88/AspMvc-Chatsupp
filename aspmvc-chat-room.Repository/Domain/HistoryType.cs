@@ -8,17 +8,13 @@ using System.Threading.Tasks;
 
 namespace AspMvcChatsupp.DataAccess.Domain
 {
-    [Table("Rooms")]
-    public class Room
+    [Table("HistoryTypes")]
+    public class HistoryType
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int RoomId { get; set; }
+        public int HistoryTypeId { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-
-        public virtual ICollection<Agent> AdministratorAgents { get; set; }
-        public virtual ICollection<RoomEvent> Events { get; set; }
-        public virtual ICollection<ConnectionInfo> Connections { get; set; }
+        public string LegendTemplate { get; set; }
     }
 }

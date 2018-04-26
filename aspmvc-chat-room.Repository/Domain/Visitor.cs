@@ -14,16 +14,24 @@ namespace AspMvcChatsupp.DataAccess.Domain
         public Visitor()
         {
             this.CurrentConnections = new List<CurrentConnection>();
+            this.MessageHistory = new List<ChatHistory>();
+            this.ConnectionLogs = new List<ConnectionLog>();
         }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int VisitorId { get; set; }
         public string Name { get; set; }
-        public string OperatingSystem { get; set; }
-        public string Location { get; set; }
+        public string Email { get; set; }
+        public EnumState StateId { get; set; }
+        public Nullable<int> AssignedAgentId { get; set; }
 
+        [ForeignKey("AssignedAgentId")]
+        public virtual Agent AssignedAgent { get; set; }
+        [ForeignKey("StateId")]
+        public virtual State State { get; set; }
         public virtual ICollection<CurrentConnection> CurrentConnections { get; set; }
-        public virtual ICollection<MessageHistory> MessageHistory { get; set; }
+        public virtual ICollection<ChatHistory> MessageHistory { get; set; }
+        public virtual ICollection<ConnectionLog> ConnectionLogs { get; set; }
 
     }
 }

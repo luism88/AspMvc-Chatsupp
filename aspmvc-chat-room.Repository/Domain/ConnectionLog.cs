@@ -9,25 +9,21 @@ using System.Threading.Tasks;
 namespace AspMvcChatsupp.DataAccess.Domain
 {
     [Table("ConnectionsInfo")]
-    public class ConnectionInfo
+    public class ConnectionLog
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int ConnectionInfoId { get; set; }
         public int VisitorId { get; set; }
-        public Nullable<int> RoomId { get; set; }
-        public Nullable<int> AgentId { get; set; }
+        public Nullable<int> GroupId { get; set; }
         public DateTime UserConnectionDate { get; set; }
-        public Nullable<DateTime> AgentConnectionDate { get; set; }
-        public Nullable<int> StateId { get; set; }
-
-        [ForeignKey("AgentId")]
-        public virtual Agent Agente { get; set; }
+        public string OperatingSystem { get; set; }
+        public string Location { get; set; }
+       
         [ForeignKey("VisitorId")]
         public virtual Visitor Visitor { get; set; }
-        [ForeignKey("RoomId")]
-        public virtual Room Room { get; set; }
-        [ForeignKey("StateId")]
-        public virtual State State { get; set; }
+        [ForeignKey("GroupId")]
+        public virtual Group Group { get; set; }
+        
     }
 }

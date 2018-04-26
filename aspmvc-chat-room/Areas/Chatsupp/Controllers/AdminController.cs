@@ -1,4 +1,5 @@
-﻿using AspMvcChatsupp.MVC.Areas.Chatsupp.Models;
+﻿using AspMvcChatsupp.DataAccess.Domain;
+using AspMvcChatsupp.MVC.Areas.Chatsupp.Models;
 using AspMvcChatsupp.MVC.Controllers;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,14 @@ namespace AspMvcChatsupp.MVC.Areas.Chatsupp.Controllers
         // GET: Chatsupp/Admin
         public ActionResult Dashboard()
         {
-            var lstConnectedClientes = RepSingleton.Rep.RepConnectionInfo.FindBy(conn => conn.StateId == 1).ToList();
+            var lstConnectedVisitors = RepSingleton.Rep.RepVisitor
+                                                    .FindBy(vis => vis.StateId == EnumState.Connected 
+                                                                || vis.StateId == EnumState.WaitingAnswer
+                                                    ).ToList();
             if (Request.IsAjaxRequest())
-                return PartialView("_VisitorList", lstConnectedClientes);
+                return PartialView("_VisitorList", lstConnectedVisitors);
             else
-                return View(lstConnectedClientes);
+                return View(lstConnectedVisitors);
         }
 
         public ActionResult ChatBoxAgent(string title)
