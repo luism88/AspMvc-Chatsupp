@@ -26,5 +26,10 @@ namespace AspMvcChatsupp.DataAccess.Domain
         public virtual Visitor Visitor { get; set; }
         [ForeignKey("EventTypeId")]
         public virtual EventType EventType { get; set; }
+
+        public void FormatValue()
+        {
+            this.Value = this.EventType == null ? this.Value : string.Format(this.EventType.LegendTemplate, this.Value);
+        }
     }
 }

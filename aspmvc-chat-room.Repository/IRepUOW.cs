@@ -15,9 +15,9 @@ namespace AspMvcChatsupp.DataAccess
         
         RepAgent RepAgent { get; }
       
-        RepRoom RepRoom { get; }
+        RepGroup RepGroup { get; }
         
-        RepRoomEvent RepRoomEvent { get; }
+        RepEventType RepEventType{ get; }
         
         RepConnectionInfo RepConnectionInfo { get; }
        

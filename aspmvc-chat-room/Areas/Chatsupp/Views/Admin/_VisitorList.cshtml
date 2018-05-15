@@ -3,26 +3,37 @@
     Layout = null;
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Address</th>
-            <th>Machine</th>
-            <th>Estado</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr data-name="@item.Name" data-conninfoid="@item.VisitorId">
-            <td>@item.Name</td>
-            <td>@item.ConnectionLogs.LastOrDefault().Location</td>
-            <td>@item.ConnectionLogs.LastOrDefault().OperatingSystem</td>
-            <td>@item.State.Name</td>
-            
-        </tr>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Visitors</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="visitorTable" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Machine</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr data-name="@item.Name" data-conninfoid="@item.VisitorId">
+                        <td>@item.Name</td>
+                        <td>@item.ConnectionLogs.LastOrDefault().Location</td>
+                        <td>@item.ConnectionLogs.LastOrDefault().OperatingSystem</td>
+                        <td>@item.State.Name</td>
 
-        }
-    </tbody>
-</table>
+                    </tr>
+
+                }
+            </tbody>
+            
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->

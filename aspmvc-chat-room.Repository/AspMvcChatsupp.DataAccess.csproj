@@ -56,16 +56,16 @@
     <Compile Include="Domain\Group.cs" />
     <Compile Include="Domain\State.cs" />
     <Compile Include="Domain\Visitor.cs" />
-    <Compile Include="Migrations\201804252316382_InitData.cs" />
-    <Compile Include="Migrations\201804252316382_InitData.Designer.cs">
-      <DependentUpon>201804252316382_InitData.cs</DependentUpon>
+    <Compile Include="Migrations\201805092036540_InitialData.cs" />
+    <Compile Include="Migrations\201805092036540_InitialData.Designer.cs">
+      <DependentUpon>201805092036540_InitialData.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repository\RepAgent.cs" />
     <Compile Include="Repository\RepConnectionInfo.cs" />
     <Compile Include="Repository\RepCurrentConnection.cs" />
-    <Compile Include="Repository\RepRoomEvent.cs" />
-    <Compile Include="Repository\RepRoom.cs" />
+    <Compile Include="Repository\RepEventType.cs" />
+    <Compile Include="Repository\RepGroup.cs" />
     <Compile Include="Repository\RepVisitor.cs" />
     <Compile Include="Toolkit\GenericRepositorh.cs" />
     <Compile Include="Toolkit\IGenericRepository.cs" />
@@ -78,8 +78,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201804252316382_InitData.resx">
-      <DependentUpon>201804252316382_InitData.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201805092036540_InitialData.resx">
+      <DependentUpon>201805092036540_InitialData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

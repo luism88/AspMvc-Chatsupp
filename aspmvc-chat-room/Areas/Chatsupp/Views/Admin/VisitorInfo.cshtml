@@ -1,0 +1,178 @@
+﻿@model AspMvcChatsupp.DataAccess.Domain.Visitor
+@{
+    Layout = null;
+
+}
+
+<div class="row">
+    <div class="col-md-3">
+
+        <!-- Profile Image -->
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    <img class="profile-user-img img-fluid img-circle" src="~/Content/img/avatarVisitor.png" alt="User profile picture">
+                </div>
+                @Html.HiddenFor(model => model.VisitorId)
+                <h3 id="visitorName" class="profile-username text-center">@Model.Name</h3>
+
+                <p class="text-muted text-center">Email @Model.Email</p>
+
+                <strong><i class="fa fa-map-marker mr-1"></i> State</strong>
+
+                <p class="text-muted">@Model.State.Name</p>
+
+                <hr>
+
+                <strong><i class="fa fa-book mr-1"></i> Machine</strong>
+
+                <p class="text-muted">
+                    Windows 10
+                </p>
+
+                <hr>
+
+                <strong><i class="fa fa-map-marker mr-1"></i> Location</strong>
+
+                <p class="text-muted">Malibu, California</p>
+
+                <hr>
+
+                <strong><i class="fa fa-pencil mr-1"></i> Ip Adress</strong>
+
+                <p class="text-muted">
+                    200.000.0.00
+                </p>
+
+                <hr>
+
+                <strong><i class="fa fa-file-text-o mr-1"></i> From</strong>
+
+                <p class="text-muted">http://fromweb.dot</p>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+
+    <div class="col-md-9">
+        <div class="card card-widget">
+            <div class="card-header">
+                <div class="user-block">
+                    <h3 class="card-title">Messages</h3>
+                </div>
+            </div>
+
+            <div class="card-body card-comments">
+                @foreach (var item in Model.MessageHistory)
+                {
+                    <div class="card-comment">
+                        <!-- User image -->
+                        <img class="img-circle img-sm" src=" @(item.EventType.Source == AspMvcChatsupp.DataAccess.Domain.EnumEventSoruce.FromVisitor ? "/Content/img/avatarVisitor.png" : "/Content/img/avatarSupport.png")" alt="User Image">
+
+                        <div class="comment-text">
+                            <span class="username">
+                                @(item.EventType.Source == AspMvcChatsupp.DataAccess.Domain.EnumEventSoruce.FromVisitor ? item.Visitor.Name : item.Agent.Name)
+                                <span class="text-muted float-right">@item.Date.ToShortDateString()</span>
+                            </span><!-- /.username -->
+                            @item.Value
+                        </div>
+                        <!-- /.comment-text -->
+                    </div>
+                }
+
+                @*<!-- /.card-comment -->
+                    <div class="card-comment">
+                        <!-- User image -->
+                        <img class="img-circle img-sm" src="~/Content/img/avatarVisitor.png" alt="User Image">
+                        <div class="comment-text">
+                            <span class="username">
+                                Nora Havisham
+                                <span class="text-muted float-right">8:03 PM Today</span>
+                            </span><!-- /.username -->
+                            The point of using Lorem Ipsum is that it has a more-or-less
+                            normal distribution of letters, as opposed to using
+                            'Content here, content here', making it look like readable English.
+                        </div>
+                        <!-- /.comment-text -->
+                    </div>*@
+                <!-- /.card-comment -->
+            </div>
+            <!-- /.card-footer -->
+            <div class="card-footer">
+                <form id="formMessage">
+                    <img class="img-fluid img-circle img-sm" src="~/Content/img/avatarSupport.png" alt="Alt Text">
+                    <!-- .img-push is used to add margin to elements next to floating images -->
+                    <div class="img-push">
+                        <input type="text" name="message" class="form-control form-control-sm" placeholder="Press enter to send a message">
+                    </div>
+                </form>
+            </div>
+            <!-- /.card-footer -->
+        </div>
+    </div>
+</div>
+@section Scripts{
+<script type="text/javascript">
+        $(function () {
+            var connInfoId = null;
+            var chatsuppHub = null;
+
+            var refreshChatHistory = function () {
+                $.ajax({
+                    url: "/Chatsupp/Admin/VisitorInfo",
+                    type: "GET",
+                    success: function (resp) {
+                        $(".content").html(resp);
+                        initVisitorTable();
+                    }
+                })
+            }
+
+            var sendMessageToVisitor = function (e) {
+                e.preventDefault();
+                chatsuppHub.server.sendToVisitor($("#VisitorId").val(), $(this).find("input[name='message']").val());
+                refreshChatHistory();
+                //var divComment = $("<div>", { class: "card-comment" });
+                //divComment.append($("<img>", { class: "img-circle img-sm", src: "/Content/img/avatarSupport.png"}));
+                //var divCommentText = $("<div>", { class: "comment-text" });
+                //divCommentText.append($("<span>", { class: "username" }).html("yo").append($("<span>", { class: "text-muted float-right" })));
+                //divCommentText.append($("<p>").html(""));
+                //divComment.append(divCommentText);
+                //$(".div-comments").append(divComment);
+                
+            }
+
+            var bindEvents = function () {
+                $("#formMessage").submit(sendMessageToVisitor);
+            }
+
+            var init = function () {
+
+                chatsuppHub = $.connection.chatsuppHub;
+
+                // Start the connection.
+                $.connection.hub.start().done(function () {
+                    console.log("successful connection");
+                    chatsuppHub.server.registerAgent();
+
+                }).fail(function (data) {console.log(data)});
+
+                //ChtuHub callbacks
+                chatsuppHub.client.receiveVisitorMessage = function (visitorName, message) {
+                    console.log(visitorName + ": " + message);
+                    refreshChatHistory();
+                   
+                };
+                chatsuppHub.client.refreshHistory = function () {
+                    refreshChatHistory();
+                };
+                bindEvents();
+
+            }
+
+            init();
+        });
+
+</script>
+}

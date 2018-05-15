@@ -22,6 +22,7 @@ namespace AspMvcChatsupp.DataAccess.Domain
         public string Name { get; set; } 
         public string Username { get; set; }
         public string Password { get; set; }
+        public string ProfilePicture { get; set; }
         public int RoomId { get; set; }
 
         [ForeignKey("RoomId")]

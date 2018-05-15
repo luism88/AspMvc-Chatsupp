@@ -14,8 +14,8 @@ namespace AspMvcChatsupp.DataAccess
         private RepVisitor _repVisitor;
         private RepAgent _repAgent;
         private RepConnectionInfo _repConnectionInfo;
-        private RepRoom _repRoom;
-        private RepRoomEvent _repRoomEvent;
+        private RepGroup _repRoom;
+        private RepEventType _repRoomEvent;
         private RepCurrentConnection _repCurrentConnection;
 
 
@@ -57,18 +57,18 @@ namespace AspMvcChatsupp.DataAccess
                 return _repAgent ?? (_repAgent = new RepAgent(_db));
             }
         }
-        public RepRoom RepRoom
+        public RepGroup RepGroup
         {
             get
             {
-                return _repRoom ?? (_repRoom = new RepRoom(_db));
+                return _repRoom ?? (_repRoom = new RepGroup(_db));
             }
         }
-        public RepRoomEvent RepRoomEvent
+        public RepEventType RepEventType
         {
             get
             {
-                return _repRoomEvent ?? (_repRoomEvent = new RepRoomEvent(_db));
+                return _repRoomEvent ?? (_repRoomEvent = new RepEventType(_db));
             }
         }
         public RepConnectionInfo RepConnectionInfo

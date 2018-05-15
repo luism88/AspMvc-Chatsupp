@@ -15,14 +15,5 @@ namespace AspMvcChatsupp.MVC.Areas.Chatsupp.Controllers
             return View();
         }
 
-        public ActionResult ChatBox(string title)
-        {
-            return View(new ChatBoxModel { Title = title });
-        }
-
-        public ActionResult ChatBoxVisitor()
-        {
-            return View(new ChatBoxModel { Title = "Send us a messaage" });
-        }
     }
 }

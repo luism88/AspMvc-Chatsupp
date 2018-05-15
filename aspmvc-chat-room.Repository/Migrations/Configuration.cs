@@ -32,12 +32,48 @@ namespace AspMvcChatsupp.DataAccess.Migrations
                 new State { StateId = EnumState.WaitingAnswer, Name = EnumState.WaitingAnswer.ToString() }
             );
             context.EventTypes.AddOrUpdate(
-                new EventType { EventTypeId = EnumEventType.AgentConnected, Name = EnumEventType.AgentConnected.ToString() },
-                new EventType { EventTypeId = EnumEventType.AgentDisconnected, Name = EnumEventType.AgentDisconnected.ToString() },
-                new EventType { EventTypeId = EnumEventType.AgentMessage, Name = EnumEventType.AgentMessage.ToString() },
-                new EventType { EventTypeId = EnumEventType.VisitorConnected, Name = EnumEventType.VisitorConnected.ToString() },
-                new EventType { EventTypeId = EnumEventType.VisitorDisconected, Name = EnumEventType.VisitorDisconected.ToString() },
-                new EventType { EventTypeId = EnumEventType.VisitorMessage, Name = EnumEventType.VisitorMessage.ToString() }
+                new EventType {
+                    EventTypeId = EnumEventType.AgentConnected,
+                    Name = EnumEventType.AgentConnected.ToString(),
+                    Source = EnumEventSoruce.FromAgent,
+                    isVisibleToVisitor = false,
+                    LegendTemplate = "joined"
+                },
+                new EventType {
+                    EventTypeId = EnumEventType.AgentDisconnected,
+                    Name = EnumEventType.AgentDisconnected.ToString(),
+                    Source = EnumEventSoruce.FromAgent,
+                    isVisibleToVisitor = false,
+                    LegendTemplate = "disconnected"
+                },
+                new EventType {
+                    EventTypeId = EnumEventType.AgentMessage,
+                    Name = EnumEventType.AgentMessage.ToString(),
+                    isVisibleToVisitor = true,
+                    Source = EnumEventSoruce.FromAgent,
+                    LegendTemplate = "{0}"
+                },
+                new EventType {
+                    EventTypeId = EnumEventType.VisitorConnected,
+                    Name = EnumEventType.VisitorConnected.ToString(),
+                    Source = EnumEventSoruce.FromVisitor,
+                    isVisibleToVisitor = false,
+                    LegendTemplate = "joined"
+                },
+                new EventType {
+                    EventTypeId = EnumEventType.VisitorDisconected,
+                    Name = EnumEventType.VisitorDisconected.ToString(),
+                    Source = EnumEventSoruce.FromVisitor,
+                    isVisibleToVisitor = false,
+                    LegendTemplate = "disconnected"
+                },
+                new EventType {
+                    EventTypeId = EnumEventType.VisitorMessage,
+                    Name = EnumEventType.VisitorMessage.ToString(),
+                    isVisibleToVisitor = true,
+                    Source = EnumEventSoruce.FromVisitor,
+                    LegendTemplate = "{0}"
+                }
             );
 
         }

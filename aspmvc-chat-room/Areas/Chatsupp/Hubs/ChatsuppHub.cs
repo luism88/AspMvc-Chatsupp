@@ -46,12 +46,8 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
                 GroupId = 1
 
             });
-            connectedUser.MessageHistory.Add(new ChatHistory
-            {
-                Date = DateTime.Now,
-                EventTypeId = EnumEventType.VisitorConnected,
+            connectedUser.MessageHistory.Add(_NewHistory(EnumEventType.VisitorConnected));
 
-            });
 
             _rep.SaveChanges();
 
@@ -59,6 +55,7 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
 
             //actualiza lista de visitantes en el panel de agentes.
             this._RefreshVisitorList();
+            this._RefreshHistorial(connectedUser.VisitorId);
             
         }
 
@@ -126,6 +123,7 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
 
             var agentLogged = _rep.RepAgent.FindBy(agt => agt.Username == Context.User.Identity.Name).FirstOrDefault();
 
+            visitor.AssignedAgent = agentLogged;
             agentLogged.MessageHistory.Add(new ChatHistory
             {
                 AgentId = visitor.AssignedAgentId,
@@ -142,11 +140,29 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
 
         private void _RefreshVisitorList()
         {
-            Clients.Clients(_rep.RepAgent.GetAll()
+            var currentAgents = _rep.RepAgent.GetAll()
                                            .SelectMany(vis => vis.CurrentConnections)
                                            .Select(conn => conn.ConnectionId)
-                                           .ToList())
-                                           .refreshVisitorList();
+                                           .ToList();
+
+            //actualiza lista de agentes conectados
+            Clients.Clients(currentAgents).refreshVisitorList();
+
+           
+
+        }
+
+        private void _RefreshHistorial(int visitorId)
+        {
+            var currentAgents = _rep.RepAgent.GetAll()
+                                        .SelectMany(vis => vis.CurrentConnections)
+                                        .Select(conn => conn.ConnectionId)
+                                        .ToList();
+
+            //refresca el historial del visitante para todos los agentes que lo estan consultando.
+            Clients.Clients(currentAgents).refreshHistory(visitorId);
+           
+           
         }
         #endregion
 
@@ -154,6 +170,8 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
         public override Task OnDisconnected(bool stopCalled)
         {
             var currentConn = _rep.RepCurrentConnection.FindBy(conn => conn.ConnectionId == Context.ConnectionId).FirstOrDefault();
+            int visitorId = 0;
+            bool triggerRefresh = false;
 
             // es un id de visitante?
             if (currentConn.Visitor != null)
@@ -161,21 +179,38 @@ namespace aAspMvcChatsupp.MVC.Areas.Chatsupp.Hubs
                 if (currentConn.Visitor.CurrentConnections.Count == 1)
                 {
                     currentConn.Visitor.StateId = EnumState.Disconnected;
-                    currentConn.Visitor.MessageHistory.Add(new ChatHistory
-                    {
-                        Visitor = currentConn.Visitor,
-                        Date = DateTime.Now,
-                        EventTypeId = EnumEventType.VisitorDisconected,
-
-                    });
+                    currentConn.Visitor.MessageHistory.Add(_NewHistory(EnumEventType.VisitorDisconected));
+                    triggerRefresh = true;
+                    visitorId = currentConn.VisitorId.Value;
                 }
+                
             }
 
             _rep.RepCurrentConnection.Delete(currentConn);
             _rep.SaveChanges();
-            _RefreshVisitorList();
+
+            if (triggerRefresh)
+            {
+                _RefreshHistorial(visitorId);
+                _RefreshVisitorList();
+            }
+           
 
             return base.OnDisconnected(stopCalled);
+        }
+
+        private ChatHistory _NewHistory(EnumEventType type)
+        {
+            EventType evtType = _rep.RepEventType.FindBy(evt => evt.EventTypeId == type).FirstOrDefault();
+
+            ChatHistory history = new ChatHistory
+            {
+                Date = DateTime.Now,
+                EventType = evtType
+            };
+            history.FormatValue();
+
+            return history;
         }
 
     }

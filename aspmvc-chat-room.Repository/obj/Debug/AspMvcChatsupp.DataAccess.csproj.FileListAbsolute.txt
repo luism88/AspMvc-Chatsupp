@@ -21,5 +21,6 @@ C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room.Repository\bin\Debug
 C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room.Repository\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room.Repository\obj\Debug\AspMvcChatsupp.DataAccess.dll
 C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room.Repository\obj\Debug\AspMvcChatsupp.DataAccess.pdb
-C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room.Repository\obj\Debug\AspMvcChatsupp.DataAccess.Migrations.InitData.resources
+C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room.Repository\obj\Debug\AspMvcChatsupp.DataAccess.Migrations.InitialData.resources
 C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room.Repository\obj\Debug\AspMvcChatsupp.DataAccess.csproj.GenerateResource.Cache
+C:\Users\Luis\source\repos\AspMvc-Chatsupp\aspmvc-chat-room.Repository\obj\Debug\AspMvcChatsupp.DataAccess.csprojResolveAssemblyReference.cache

@@ -24,10 +24,26 @@ namespace AspMvcChatsupp.MVC.Areas.Chatsupp.Controllers
                 return View(lstConnectedVisitors);
         }
 
-        public ActionResult ChatBoxAgent(string title)
+        public ActionResult VisitorInfo(int visitorId)
         {
-            return View(new ChatBoxModel { Title = title });
+            var visitor = RepSingleton.Rep.RepVisitor.FindBy(vis => vis.VisitorId == visitorId).FirstOrDefault();
+            
+            return View(visitor);
         }
 
+        public ActionResult MyQueue(int agentId)
+        {
+            var myQueue = RepSingleton.Rep.RepAgent.FindBy(agent => agent.AgentId == agentId)
+                                                .First().MessageHistory
+                                                .GroupBy(hist => hist.Visitor)
+                                                .Select(hist => new MyQueueModel
+                                                {
+                                                    VisitorName = hist.Key.Name,
+                                                    LastMessage = hist.Key.MessageHistory.FirstOrDefault().Value
+                                                }).ToList();
+            return PartialView("_MyQueue", myQueue);
+        }
+
+       
     }
 }

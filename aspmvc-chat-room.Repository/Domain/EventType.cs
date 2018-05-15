@@ -17,12 +17,19 @@ namespace AspMvcChatsupp.DataAccess.Domain
         VisitorDisconected,
         VisitorMessage
     }
+    public enum EnumEventSoruce
+    {
+        FromAgent,
+        FromVisitor
+    }
     [Table("EventsType")]
     public class EventType
     {
         [Key]
         public EnumEventType EventTypeId { get; set; }
         public string Name { get; set; }
+        public EnumEventSoruce Source { get; set; }
+        public bool isVisibleToVisitor { get; set; }
         public string LegendTemplate { get; set; }
     }
 }

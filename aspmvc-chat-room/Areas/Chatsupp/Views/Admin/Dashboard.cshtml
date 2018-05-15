@@ -1,43 +1,21 @@
 ﻿@model IList<AspMvcChatsupp.DataAccess.Domain.Visitor>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-    <h2>BAdmin</h2>
-    <input type="hidden" name="agentName" value="@AspMvcChatsupp.MVC.Helpers.SessionHelper.AgentName" />
-    <input type="hidden" name="agentId" value="@AspMvcChatsupp.MVC.Helpers.SessionHelper.AgentId" />
+<div class="container-fluid">
     <div id="_visitorList">
-        @Html.Partial("_VisitorList",Model)
+        @Html.Partial("_VisitorList", Model)
     </div>
+</div>
+    
+   
    
 @section Scripts{
     <script type="text/javascript">
         $(function () {
-            var connInfoId = null;
             var chatsuppHub = null;
-            var createChatBox = function (visitorName) {
-                console.log(visitorName);
-                $.ajax({
-                    url: "/Chatsupp/Admin/ChatBoxAgent",
-                    type: "GET",
-                    contentType: "application/json",
-                    data: {title: visitorName },
-                    success: function (resp) {
-                        $("body").append(resp);
-                        //$("#btnNameOk").click(registerVisitor);
-                        $("#formChat").submit(sendMessageToVisitor);
-                    }
-                })
-            }
-
-            var sendMessageToVisitor = function (e) {
-                
-                e.preventDefault();
-                
-                chatsuppHub.server.sendToVisitor(connInfoId, $(this).find("input[name='message']").val());
-            }
-
+            
             var init = function () {
                 
                 chatsuppHub = $.connection.chatsuppHub;
@@ -49,29 +27,89 @@
 
                 }).fail(function (data) {console.log(data)});
 
-                //ChtuHub callbacks
-                chatsuppHub.client.receiveVisitorMessage = function (visitorName, message) {
-                    alert(visitorName + " says: " + message);
-                    //createChatBox()
-                };
                 chatsuppHub.client.refreshVisitorList = function () {
                     $.ajax({
                         url: "/Chatsupp/Admin/Dashboard",
                         type: "GET",
                         success: function (resp) {
                             $("#_visitorList").html(resp);
+                            initVisitorTable();
                         }
                     })
                 };
+                //ChtuHub callbacks
+                chatsuppHub.client.receiveVisitorMessage = function (visitorName, message) {
+                    console.log(visitorName + ": " + message);
+                    addHistoryItem(visitorName, message);
 
-                $("table tbody tr").click(function () {
-                    connInfoId = $(this).data("conninfoid");
-                    createChatBox($(this).data("name"));
-                })
+                };
+                chatsuppHub.client.refreshHistory = function (visitorId) {
+                    console.log(visitorId)
+                    if (visitorId == $("#VisitorId").val()) {
+                        refreshChatHistory();
+                    }
+                    
+                };
+                initVisitorTable();
+                bindEvents();
 
             }
 
+            var initVisitorTable = function () {
+                $("#visitorTable").DataTable();
+                $("#visitorTable tbody tr").click(function () {
+                   
+                    $.ajax({
+                        url: "/Chatsupp/Admin/VisitorInfo",
+                        type: "GET",
+                        contentType: "application/json",
+                        data: { visitorId: $(this).data("conninfoid")},
+                        success: function (resp) {
+                            $(".content").html(resp);
+                            bindEvents();
+                            
+                        }
+                    })
+                })
+            }
+
+            var refreshChatHistory = function () {
+               
+                $.ajax({
+                    url: "/Chatsupp/Admin/VisitorInfo",
+                    type: "GET",
+                    data: {visitorId : $("#VisitorId").val()},
+                    success: function (resp) {
+                        $(".content").html(resp);
+                    }
+                })
+            }
+
+            var sendMessageToVisitor = function (e) {
+                e.preventDefault();
+                var message = $(this).find("input[name='message']").val();
+                chatsuppHub.server.sendToVisitor($("#VisitorId").val(), message);
+                addHistoryItem($("#visitorName").html(), message);
+                $(this).trigger("reset");
+            }
+
+            var addHistoryItem = function (username, value) {
+                var divComment = $("<div>", { class: "card-comment" });
+                divComment.append($("<img>", { class: "img-circle img-sm", src: "/Content/img/avatarSupport.png"}));
+                var divCommentText = $("<div>", { class: "comment-text" });
+                divCommentText.append($("<span>", { class: "username" }).html(username).append($("<span>", { class: "text-muted float-right" })));
+                divCommentText.append($("<p>").html(value));
+                divComment.append(divCommentText);
+                $(".card-comments").append(divComment);
+
+            }
+
+            var bindEvents = function () {
+                $("#formMessage").submit(sendMessageToVisitor);
+            }
+
             init();
+
         });
 
     </script>  
